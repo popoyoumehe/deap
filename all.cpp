@@ -350,12 +350,15 @@ void print_task2(Deap &m) {
 void task1( std::vector<Data> &data, MaxHeap &m) {
     std::string filename;
     std::string file_number;
+    std::cout << "\n";
     while (true) {
-        std::cout << "Input a file number [0: quit]: ";
+        std::cout << "Input a file number ([0] Quit): ";
         std::cin >> file_number;
         std::string filename = "input" + file_number + ".txt"; // 轉字串
         std::ifstream infile(filename); // 讀檔
         if ( file_number == "0" ) {
+            std::cout << "\n";
+            char ch = getchar();
             return;
         }
         if (!infile) {
@@ -380,12 +383,15 @@ void task1( std::vector<Data> &data, MaxHeap &m) {
 void task2( std::vector<Data> &data, Deap &d) {
     std::string filename;
     std::string file_number;
+    std::cout << "\n";
     while (true) {
-        std::cout << "Input a file number [0: quit]: ";
+        std::cout << "Input a file number ([0] Quit): ";
         std::cin >> file_number;
         std::string filename = "input" + file_number + ".txt"; // 轉字串
         std::ifstream infile(filename); // 讀檔
         if ( file_number == "0" ) {
+            std::cout << "\n";
+            char ch = getchar();
             return;
         }
         if (!infile) {
@@ -432,7 +438,7 @@ int main() {
         while ((ch = getchar()) != '\n') {
             if (ch == ' ' || ch == '\t') {
                 continue;
-            } else if (ch >= '0' && ch <= '4') {
+            } else if (ch >= '0' && ch <= '2') {
                 if (has_digit) {
                     invalid = true; // 多個數字
                 } else {
@@ -445,7 +451,7 @@ int main() {
         }
     // 處理非法輸入
         if (invalid || (!has_digit)) {
-            std::cout << "Command does not exist!" << std::endl << std::endl;
+            std::cout << "\nCommand does not exist!" << std::endl << std::endl;
             continue;
         }
         if (choice == 0) {
@@ -454,19 +460,21 @@ int main() {
             task1(data, m);
         } else if (choice == 2) {
             task2(data, d);
-        } else if (choice == 3) {
+        } 
+         /*else if (choice == 3) {
             if (m.isEmpty()) {
                 std::cout << "----- Execute Mission 1 first! -----\n\n";
                 continue;
             }
-            //task3(tree, data, change, size);
+            //task3();
         } else if (choice == 4) {
             if (m.isEmpty()) {
                 std::cout << "----- Execute Mission 1 first! -----\n\n";
                 continue;
             }
-            //task4(tree, change);
+            //task4();
         }
+        */
     }
     return 0;
 }
