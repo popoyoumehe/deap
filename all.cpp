@@ -111,6 +111,12 @@ class Deap {
         data.push_back(dummy);
     }
 
+    void reset() {
+        HeapData dummy;
+        data.push_back(dummy);
+        return;
+    }
+
     bool isEmpty() {
         if ( data.size() <= 1) {
             return true;
@@ -120,9 +126,8 @@ class Deap {
 
     bool is_minheap(int idx, int &level) {
         level = (int)floor(log2(idx + 1));
-        int first_idx = exp2(level);
-        int half = first_idx / 2;
-        if ( idx < first_idx + half ) {
+        int leftofmax = exp2(level - 1) * 3 - 1;
+        if ( idx < leftofmax ) {
             return true;
         }
         return false;
@@ -130,13 +135,12 @@ class Deap {
 
 
     int corresponding_point(bool is_minheep, int level, int idx) {
-        if ( idx == 1 || idx == 2) {
+        if ( idx == 1 ) {
             return idx;
         }
         int displacement = exp2(level - 1);
         if ( is_minheep ) {
             int parent = (idx + displacement - 1) / 2;
-            //std::cout << parent << "p\n";
             return parent;
         }
         return idx - displacement;
@@ -149,13 +153,13 @@ class Deap {
         for (int i = 0; i < d.size(); i++) {
             HeapData node;
             node.graduate_num = d[i].graduate_num;
-            node.num = d[i].num; 
+            node.num = num; 
             data.push_back(node);
             int place = data.size() - 1;
             bool is_min = is_minheap(place, level);
             if ( is_min ) { // minheap
                 int correspond_point = corresponding_point(is_min, level, place);
-                if ( data[correspond_point].graduate_num > data[place].graduate_num ) { // maxheap
+                if ( data[correspond_point].graduate_num < data[place].graduate_num ) { // maxheap
                     HeapData temp2;
                     temp2 = data[correspond_point];
                     data[correspond_point] = data[place];
@@ -171,7 +175,7 @@ class Deap {
 
             else { // maxheap
                 int correspond_point = corresponding_point(is_min, level, place);
-                if ( data[correspond_point].graduate_num < data[place].graduate_num ) { // minheap
+                if ( data[correspond_point].graduate_num > data[place].graduate_num ) { // minheap
                     HeapData temp2;
                     temp2 = data[correspond_point];
                     data[correspond_point] = data[place];
@@ -225,6 +229,15 @@ class Deap {
         }
 
         return total_nodes;
+    }
+
+    void print_test() {
+        for (int i = 0; i < data.size(); i++) {
+            std::cout << data[i].num << "\t";
+            std::cout << data[i].graduate_num << "/";
+        }
+        std::cout << "\n";
+        return;
     }
 };
 
@@ -303,30 +316,32 @@ void print_order(std::vector<Data> &data) {
 }
 
 void print_task1(MaxHeap &m) {
+    std::cout << "<max heap>\n";
     HeapData root = m.data[0];
-    std::cout << root.num << "\t";
+    std::cout << "root: [" << root.num << "] ";
     std::cout << root.graduate_num << "\n";
     int size = m.data.size() - 1;
     HeapData bottom = m.data[size];
-    std::cout << bottom.num << "\t";
+    std::cout << "bottom: [" << bottom.num << "] ";
     std::cout << bottom.graduate_num << "\n";
     size = m.data.size();
     size = m.left_bottom_idx(size);
     HeapData left_bottom = m.data[size];
-    std::cout << left_bottom.num << "\t";
+    std::cout << "leftmost bottom: [" << left_bottom.num << "] ";
     std::cout << left_bottom.graduate_num << "\n";
     return;
 }
 
 void print_task2(Deap &m) {
+    std::cout << "<DEAP>\n";
     int size = m.data.size() - 1;
     HeapData bottom = m.data[size];
-    std::cout << bottom.num << "\t";
+    std::cout << "bottom: [" << bottom.num << "] ";
     std::cout << bottom.graduate_num << "\n";
     size = m.data.size();
     size = m.left_bottom_idx(size);
     HeapData left_bottom = m.data[size];
-    std::cout << left_bottom.num << "\t";
+    std::cout << "leftmost bottom: [" << left_bottom.num << "] ";
     std::cout << left_bottom.graduate_num << "\n";
     return;
 }
@@ -358,6 +373,7 @@ void task1( std::vector<Data> &data, MaxHeap &m) {
     char ch;
     ch = getchar();
     data.clear();
+    m.data.clear();
     return;
 }
 
@@ -387,6 +403,8 @@ void task2( std::vector<Data> &data, Deap &d) {
     char ch;
     ch = getchar();
     data.clear();
+    d.data.clear();
+    d.reset();
     return;
 }
 
